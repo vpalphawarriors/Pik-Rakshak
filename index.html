@@ -1,0 +1,66 @@
+DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Crop Disease Detector</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f2f7f2;margin:0;padding:0}
+    header{background:#2e7d32;color:white;padding:20px;text-align:center}
+    .container{max-width:800px;margin:auto;padding:20px}
+    .card{background:white;border-radius:10px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+    input[type=file]{margin-top:15px}
+    button{margin-top:15px;padding:10px 20px;border:none;background:#2e7d32;color:white;border-radius:6px;cursor:pointer}
+    button:hover{background:#1b5e20}
+    img{max-width:100%;margin-top:20px;border-radius:8px}
+    .result{margin-top:20px;padding:15px;background:#e8f5e9;border-radius:8px}
+  </style>
+</head>
+<body><header>
+  <h1>🌱 AI Crop Disease Detector</h1>
+  <p>Upload a crop leaf image to detect possible diseases</p>
+</header><div class="container">
+  <div class="card">
+    <h2>Upload Leaf Image</h2>
+    <input type="file" id="imageInput" accept="image/*" />
+    <br/>
+    <button onclick="analyzeImage()">Detect Disease</button><img id="preview" />
+
+<div id="result" class="result" style="display:none">
+  <h3>Detection Result</h3>
+  <p id="disease"></p>
+  <p id="treatment"></p>
+</div>
+
+  </div>
+</div><script>
+const diseases=[
+  {name:"Healthy Leaf",treatment:"No disease detected. Keep regular watering and sunlight."},
+  {name:"Early Blight",treatment:"Remove infected leaves and apply recommended fungicide."},
+  {name:"Leaf Spot",treatment:"Use copper-based fungicide and avoid overhead watering."},
+  {name:"Powdery Mildew",treatment:"Spray sulfur or neem oil on affected plants."}
+]
+
+const input=document.getElementById('imageInput')
+const preview=document.getElementById('preview')
+
+input.addEventListener('change',function(){
+  const file=this.files[0]
+  if(file){
+    preview.src=URL.createObjectURL(file)
+  }
+})
+
+function analyzeImage(){
+  if(!input.files.length){
+    alert("Please upload an image first")
+    return
+  }
+
+  const random=diseases[Math.floor(Math.random()*diseases.length)]
+
+  document.getElementById('result').style.display='block'
+  document.getElementById('disease').innerText="Detected Disease: "+random.name
+  document.getElementById('treatment').innerText="Suggested Treatment: "+random.treatment
+}
+</script></body>
+</html>
