@@ -83,7 +83,6 @@ border-radius:8px;
 
 </header>
 
-
 <div class="container">
 
 <div class="card" id="login">
@@ -122,6 +121,8 @@ border-radius:8px;
 <p id="solution"></p>
 <p id="fertilizer"></p>
 <p id="buy"></p>
+
+<button onclick="findShops()">Find Nearby Fertilizer Shops</button>
 
 </div>
 
@@ -245,7 +246,7 @@ img.src=URL.createObjectURL(file);
 document.getElementById("preview").src=img.src;
 
 
-/* Fake detection logic */
+/* Random detection (demo) */
 
 let random=Math.floor(Math.random()*diseaseDB.length);
 
@@ -261,11 +262,39 @@ document.getElementById("solution").innerText="Solution: "+data.solution;
 
 document.getElementById("fertilizer").innerText="Recommended Fertilizer: "+data.fertilizer;
 
-document.getElementById("buy").innerHTML="Purchase Link: <a href='"+data.link+"' target='_blank'>Buy Here</a>";
+document.getElementById("buy").innerHTML="Purchase Link: <a href='"+data.link+"' target='_blank'>Buy Online</a>";
+
+}
+
+
+/* FIND NEARBY SHOPS */
+
+function findShops(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat=position.coords.latitude;
+
+let lon=position.coords.longitude;
+
+let mapURL="https://www.google.com/maps/search/fertilizer+shop/@"+lat+","+lon+",15z";
+
+window.open(mapURL);
+
+});
+
+}else{
+
+alert("Location not supported");
+
+}
 
 }
 
 </script>
 
 </body>
+
 </html>
