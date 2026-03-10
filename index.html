@@ -1,102 +1,271 @@
-DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Crop Disease Detector</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;background:#f2f7f2;margin:0;padding:0}
-    header{background:#2e7d32;color:white;padding:20px;text-align:center}
-    .container{max-width:800px;margin:auto;padding:20px}
-    .card{background:white;border-radius:10px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-    input[type=file]{margin-top:15px}
-    button{margin-top:15px;padding:10px 20px;border:none;background:#2e7d32;color:white;border-radius:6px;cursor:pointer}
-    button:hover{background:#1b5e20}
-    img{max-width:100%;margin-top:20px;border-radius:8px}
-    .result{margin-top:20px;padding:15px;background:#e8f5e9;border-radius:8px}
-  </style>
-</head>
-<body><header>
-  <h1>🌱 AI Crop Disease Detector</h1>
-  <p>Upload a crop leaf image to detect possible diseases</p>
-</header><div class="container">
-  <div class="card">
-    <h2>Upload Leaf Image</h2>
-    <input type="file" id="imageInput" accept="image/*" />
-    <br/>
-    <button onclick="analyzeImage()">Detect Disease</button><img id="preview" />
 
-<div id="result" class="result" style="display:none">
-  <h3>Detection Result</h3>
-  <p id="disease"></p>
-  <p id="treatment"></p>
-</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  </div>
-</div><script>
-const diseases=[
-  {name:"Healthy Leaf",treatment:"No disease detected. Keep regular watering and sunlight."},
-  {name:"Early Blight",treatment:"Remove infected leaves and apply recommended fungicide."},
-  {name:"Leaf Spot",treatment:"Use copper-based fungicide and avoid overhead watering."},
-  {name:"Powdery Mildew",treatment:"Spray sulfur or neem oil on affected plants."}
-]
+<title>Pik Rakshak</title>
 
-const input=document.getElementById('imageInput')
-const preview=document.getElementById('preview')
+<style>
 
-input.addEventListener('change',function(){
-  const file=this.files[0]
-  if(file){
-    preview.src=URL.createObjectURL(file)
-  }
-})
-
-function analyzeImage(){
-  if(!input.files.length){
-    alert("Please upload an image first")
-    return
-  }
-
-  const random=diseases[Math.floor(Math.random()*diseases.length)]
-
-  document.getElementById('result').style.display='block'
-  document.getElementById('disease').innerText="Detected Disease: "+random.name
-  document.getElementById('treatment').innerText="Suggested Treatment: "+random.treatment
+body{
+font-family:Arial;
+background:#f2f7f2;
+margin:0;
 }
-</script></body>
-</html>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBAVFQMMpXlMoG7E2K_KWzopCx_fn1zsA4",
-  authDomain: "crop-disease-detector-fd74c.firebaseapp.com",
-  projectId: "crop-disease-detector-fd74c",
-  storageBucket: "crop-disease-detector-fd74c.firebasestorage.app",
-  messagingSenderId: "1067324559478",
-  appId: "1:1067324559478:web:2f948a50d1a5eac290cf57",
-  measurementId: "G-Z9S5VRDBNP"
-};
+header{
+background:#2e7d32;
+color:white;
+text-align:center;
+padding:20px;
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+.container{
+width:800px;
+margin:auto;
+margin-top:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+button{
+padding:10px 20px;
+margin-top:10px;
+background:#2e7d32;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1b5e20;
+}
+
+img{
+width:100%;
+margin-top:15px;
+border-radius:8px;
+}
+
+.result{
+background:#e8f5e9;
+padding:15px;
+margin-top:15px;
+border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🌱 Pik Rakshak</h1>
+<p>AI Crop Disease Detector</p>
+
+</header>
+
+
+<div class="container">
+
+<div class="card" id="login">
+
 <h2>Farmer Login</h2>
 
-<input type="text" id="name" placeholder="Enter Farmer Name">
+<input id="name" placeholder="Farmer Name">
 
-<input type="tel" id="phone" placeholder="Enter Mobile Number">
-
-<div id="recaptcha-container"></div>
+<input id="phone" placeholder="Mobile Number">
 
 <button onclick="sendOTP()">Send OTP</button>
 
-<br><br>
-
-<input type="text" id="otp" placeholder="Enter OTP">
+<input id="otp" placeholder="Enter OTP">
 
 <button onclick="verifyOTP()">Verify OTP</button>
+
+</div>
+
+
+<div class="card" id="upload" style="display:none">
+
+<h2>Upload Crop Leaf Image</h2>
+
+<input type="file" id="imageUpload" accept="image/*">
+
+<button onclick="predict()">Detect Disease</button>
+
+<img id="preview">
+
+<div id="result" class="result" style="display:none">
+
+<h3>Disease Result</h3>
+
+<p id="engDisease"></p>
+<p id="marDisease"></p>
+<p id="solution"></p>
+<p id="fertilizer"></p>
+<p id="buy"></p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* OTP SYSTEM */
+
+let otp;
+
+function sendOTP(){
+
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+
+if(name==""){
+alert("Enter Farmer Name");
+return;
+}
+
+if(phone.length!=10){
+alert("Enter valid 10 digit mobile number");
+return;
+}
+
+otp=Math.floor(100000+Math.random()*900000);
+
+alert("Demo OTP: "+otp);
+
+}
+
+function verifyOTP(){
+
+let user=document.getElementById("otp").value;
+
+if(user==otp){
+
+alert("Login Successful");
+
+document.getElementById("login").style.display="none";
+document.getElementById("upload").style.display="block";
+
+}else{
+
+alert("Wrong OTP");
+
+}
+
+}
+
+
+/* DISEASE DATABASE */
+
+const diseaseDB=[
+
+{
+eng:"Healthy Leaf",
+mar:"निरोगी पान",
+solution:"Maintain proper irrigation and balanced fertilizer.",
+fertilizer:"NPK 19:19:19",
+link:"https://www.amazon.in/s?k=npk+19+19+19+fertilizer"
+},
+
+{
+eng:"Leaf Spot",
+mar:"पानांवरील ठिपके रोग",
+solution:"Remove infected leaves and spray copper fungicide.",
+fertilizer:"Copper Oxychloride",
+link:"https://www.amazon.in/s?k=copper+oxychloride"
+},
+
+{
+eng:"Powdery Mildew",
+mar:"भुरी रोग",
+solution:"Spray sulfur fungicide or neem oil.",
+fertilizer:"Sulfur Fungicide",
+link:"https://www.amazon.in/s?k=sulfur+fungicide"
+},
+
+{
+eng:"Rust Disease",
+mar:"तांबेरा रोग",
+solution:"Spray Propiconazole fungicide.",
+fertilizer:"Propiconazole",
+link:"https://www.amazon.in/s?k=propiconazole+fungicide"
+},
+
+{
+eng:"Early Blight",
+mar:"लवकर करपा रोग",
+solution:"Apply Mancozeb fungicide and remove affected leaves.",
+fertilizer:"Mancozeb",
+link:"https://www.amazon.in/s?k=mancozeb+fungicide"
+}
+
+];
+
+
+/* DETECTION */
+
+function predict(){
+
+let file=document.getElementById("imageUpload").files[0];
+
+if(!file){
+
+alert("Upload image");
+
+return;
+
+}
+
+let img=document.createElement("img");
+
+img.src=URL.createObjectURL(file);
+
+document.getElementById("preview").src=img.src;
+
+
+/* Fake detection logic */
+
+let random=Math.floor(Math.random()*diseaseDB.length);
+
+let data=diseaseDB[random];
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("engDisease").innerText="Disease Name (English): "+data.eng;
+
+document.getElementById("marDisease").innerText="रोगाचे नाव (Marathi): "+data.mar;
+
+document.getElementById("solution").innerText="Solution: "+data.solution;
+
+document.getElementById("fertilizer").innerText="Recommended Fertilizer: "+data.fertilizer;
+
+document.getElementById("buy").innerHTML="Purchase Link: <a href='"+data.link+"' target='_blank'>Buy Here</a>";
+
+}
+
+</script>
+
+</body>
+</html>
